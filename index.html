@@ -6,11 +6,18 @@
     <style>
         body { font-family: 'Nanum Gothic', sans-serif; background: #fdf5e6; color: #5d4037; text-align: center; padding: 20px; }
         .museum-header { border-bottom: 3px double #8d6e63; margin-bottom: 20px; }
-        .top-button { margin: 10px; padding: 10px 20px; background: #8d6e63; color: white; border-radius: 5px; text-decoration: none; display: inline-block; font-weight: bold; }
-        .button-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 20px; }
-        button { padding: 15px; cursor: pointer; background: #d7ccc8; border: 2px solid #8d6e63; border-radius: 10px; font-weight: bold; }
-        button:hover { background: #efebe9; }
-        #content-area, #quiz-area { display: none; background: #fff; padding: 20px; border-radius: 15px; border: 2px dashed #8d6e63; max-width: 600px; margin: auto; text-align: left; }
+        
+        /* e뮤지엄 버튼 스타일 */
+        .top-link { margin: 20px 0; padding: 12px 25px; background: #5d4037; color: white; border-radius: 20px; text-decoration: none; display: inline-block; font-weight: bold; }
+        
+        /* 물건 버튼 그리드 스타일 */
+        .button-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
+        .item-btn { padding: 20px; cursor: pointer; background: #d7ccc8; border: 2px solid #8d6e63; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .item-btn:hover { background: #bcaaa4; color: white; }
+        
+        /* 콘텐츠 영역 */
+        #content-area, #quiz-area { display: none; background: #fff; padding: 30px; border-radius: 15px; border: 2px dashed #8d6e63; max-width: 600px; margin: auto; text-align: left; }
+        .back-btn { margin-top: 20px; padding: 10px; width: 100%; cursor: pointer; background: #a5d6a7; border: none; border-radius: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -18,36 +25,39 @@
 <div id="main-view">
     <h1 class="museum-header">🕰️ 우리 주변의 오래된 물건 전시회</h1>
     
-    <a href="https://www.emuseum.go.kr" target="_blank" class="top-button">🔍 물건 정보 찾기 (e뮤지엄)</a>
+    <a href="https://www.emuseum.go.kr" target="_blank" class="top-link">🔍 물건 정보 찾기 (e뮤지엄 바로가기)</a>
     
-    <p>궁금한 물건을 클릭해서 옛날 사람들의 생활을 알아볼까요?</p>
+    <p>아래 물건 중 궁금한 것을 클릭해 보세요!</p>
+    
     <div class="button-grid" id="item-buttons"></div>
+    
     <br>
-    <button onclick="showQuiz()" style="background:#a5d6a7;">📝 정리 퀴즈 풀기!</button>
+    <button onclick="showQuiz()" style="padding: 15px 30px; background: #ffcc80; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">📝 정리 퀴즈 풀기!</button>
 </div>
 
 <div id="content-area">
-    <h2 id="obj-name" style="text-align: center;"></h2>
+    <h2 id="obj-name" style="text-align: center; color: #8d6e63;"></h2>
     <div id="obj-info"></div>
-    <br>
-    <button onclick="goBack()" style="width: 100%;">🔙 앞으로 가기 (초기 화면)</button>
+    <button class="back-btn" onclick="goBack()">🔙 앞으로 가기 (초기 화면)</button>
 </div>
 
 <div id="quiz-area">
     <h2 style="text-align: center;">📝 정리 퀴즈</h2>
-    <p>사진 속 물건의 이름을 맞춰보세요!</p>
     <div id="quiz-content"></div>
-    <br>
-    <button onclick="goBack()" style="width: 100%;">🔙 앞으로 가기 (초기 화면)</button>
+    <button class="back-btn" onclick="goBack()">🔙 앞으로 가기 (초기 화면)</button>
 </div>
 
 <script>
-// 데이터 및 기능 스크립트는 동일합니다.
 const data = {
-    "맷돌": { "시기": "아주 옛날부터", "방법": "두 돌판 사이에 곡물을 넣고 손잡이를 돌려 갈아요.", "이유": "곡식을 가루로 만들어 요리하려고", "상황": "콩을 갈아 두부나 부침개를 만들 때", "현대물건": "믹서기", "불편함": "힘이 많이 들고 시간이 오래 걸려요.", "기분": "가족을 위해 정성껏 음식을 준비하는 뿌듯함" },
-    "카세트 테이프": { "시기": "1980~90년대", "방법": "기기에 테이프를 넣고 재생 버튼을 눌러요.", "이유": "음악을 듣거나 라디오를 녹음하려고", "상황": "좋아하는 노래를 들으려고 연필로 테이프를 감을 때", "현대물건": "스마트폰 음악 앱", "불편함": "원하는 노래를 찾으려면 한참 감아야 해요.", "기분": "좋아하는 가수의 노래를 들을 생각에 설렘" },
-    "머리 인두": { "시기": "전기가 없던 시절", "방법": "불에 달궈서 머리카락을 꼬아 모양을 내요.", "이유": "멋을 내고 머리 모양을 유지하려고", "상황": "외출하기 전 머리를 곱게 단장할 때", "현대물건": "고데기", "불편함": "온도 조절이 어렵고 화상 위험이 있어요.", "기분": "예쁘게 단장하고 나갈 생각에 기대감" },
-    "타자기": { "시기": "컴퓨터 보급 이전", "방법": "글쇠를 눌러 잉크 리본을 종이에 찍어내요.", "이유": "글을 빠르고 깔끔하게 작성하려고", "상황": "편지나 보고서를 작성할 때", "현대물건": "컴퓨터 키보드", "불편함": "오타가 나면 수정이 매우 어려워요.", "기분": "글을 완성했을 때의 뿌듯함" },
-    "풍금": { "시기": "1970~80년대 학교", "방법": "발로 페달을 밟아 바람을 일으키며 건반을 눌러요.", "이유": "음악 수업이나 노래를 반주하려고", "상황": "음악 시간에 다 같이 노래를 부를 때", "현대물건": "전자 피아노", "불편함": "발을 계속 굴러야 소리가 나서 힘들어요.", "기분": "함께 노래 부르는 즐거움" },
-    "재봉틀": { "시기": "옛날부터 현대까지(수동에서 전기로 변화)", "방법": "바늘이 위아래로 움직이며 천을 꿰매요.", "이유": "옷을 만들거나 수선하려고", "상황": "가족의 옷을 직접 만들어 입힐 때", "현대물건": "전기 재봉틀", "불편함": "손으로 돌리는 수동식은 속도가 느려요.", "기분": "가족을 위해 새 옷을 만드는 정성" },
-    "빨래판과 빨래 방망이": { "시기": "세탁기가 없던 시절", "방법": "판에 대고 비비거나 방망이로 두드려요.", "이유": "옷감의 때를 빼려고", "상황": "냇가나 마
+    "맷돌": { "시기": "아주 옛날", "방법": "두 돌판 사이에 곡물을 넣고 손잡이를 돌려 갈음", "이유": "곡식을 가루로 만들기 위해", "상황": "콩을 갈아 두부를 만들 때", "현대물건": "믹서기", "불편함": "시간이 오래 걸리고 힘이 듦", "기분": "가족을 위해 음식을 준비하는 뿌듯함" },
+    "카세트 테이프": { "시기": "1980~90년대", "방법": "기기에 테이프를 넣고 재생", "이유": "음악을 듣거나 녹음하기 위해", "상황": "좋아하는 노래를 들을 때", "현대물건": "스마트폰 음악 앱", "불편함": "원하는 노래를 찾기 어려움", "기분": "좋아하는 가수의 노래에 설렘" },
+    "머리 인두": { "시기": "전기 이전", "방법": "불에 달궈 머리카락을 꼬음", "이유": "멋을 내고 머리 모양을 유지하려고", "상황": "외출 전 단장할 때", "현대물건": "고데기", "불편함": "화상 위험이 있고 온도 조절 어려움", "기분": "예쁘게 단장할 생각에 기대감" },
+    "타자기": { "시기": "컴퓨터 이전", "방법": "글쇠를 눌러 잉크로 찍어냄", "이유": "깔끔하게 글을 작성하려고", "상황": "편지나 보고서를 쓸 때", "현대물건": "컴퓨터 키보드", "불편함": "오타 수정이 매우 어려움", "기분": "글을 완성했을 때의 뿌듯함" },
+    "풍금": { "시기": "1970~80년대", "방법": "발로 페달을 밟으며 건반을 누름", "이유": "음악 연주를 위해", "상황": "음악 수업 시간에", "현대물건": "전자 피아노", "불편함": "계속 발을 굴러야 해서 힘듦", "기분": "함께 노래 부르는 즐거움" },
+    "재봉틀": { "시기": "옛날부터", "방법": "바늘이 상하운동하며 천을 꿰맴", "이유": "옷을 만들거나 수선하려고", "상황": "새 옷을 만들 때", "현대물건": "전기 재봉틀", "불편함": "수동식은 속도가 느림", "기분": "가족을 위한 새 옷에 정성" },
+    "빨래판과 빨래 방망이": { "시기": "세탁기 이전", "방법": "판에 비비거나 방망이로 두드림", "이유": "때를 빼기 위해", "상황": "냇가에서 빨래할 때", "현대물건": "세탁기", "불편함": "허리가 아프고 너무 힘듦", "기분": "옷이 깨끗해져 시원함" },
+    "다듬잇돌과 방망이": { "시기": "아주 옛날", "방법": "돌 위에 천을 놓고 방망이로 두드림", "이유": "옷감의 구김을 펴려고", "상황": "한복을 세탁한 후", "현대물건": "다리미", "불편함": "소리가 크고 손목이 아픔", "기분": "옷을 정성껏 다듬는 정갈함" },
+    "컴퓨터와 플로피디스크": { "시기": "1990년대", "방법": "디스크를 넣어 데이터를 저장", "이유": "자료를 보관하려고", "상황": "그림 파일을 저장할 때", "현대물건": "USB, 클라우드", "불편함": "용량이 작아 불편함", "기분": "새로운 기술에 대한 신기함" },
+    "다이얼 전화기": { "시기": "1970~80년대", "방법": "숫자 구멍에 손가락을 넣어 돌림", "이유": "통화하기 위해", "상황": "친구와 통화할 때", "현대물건": "스마트폰", "불편함": "번호를 하나씩 돌려야 함", "기분": "멀리서 목소리를 들어 즐거움" },
+    "연탄과 연탄집게": { "시기": "1970~80년대", "방법": "집게로 연탄을 갈아 넣음", "이유": "난방과 요리를 위해", "상황": "겨울철에 연탄을 갈 때", "현대물건": "가스보일러", "불편함": "가스 위험과 무게", "기분": "겨울을 따뜻하게 날 수 있다는 안도감" },
+    "공중 전화기": { "시기": "핸드폰 이전", "방법": "동전을

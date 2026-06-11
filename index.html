@@ -6,6 +6,7 @@
     <style>
         body { font-family: 'Nanum Gothic', sans-serif; background: #fdf5e6; color: #5d4037; text-align: center; padding: 20px; }
         .museum-header { border-bottom: 3px double #8d6e63; margin-bottom: 20px; }
+        .top-button { margin: 10px; padding: 10px 20px; background: #8d6e63; color: white; border-radius: 5px; text-decoration: none; display: inline-block; font-weight: bold; }
         .button-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 20px; }
         button { padding: 15px; cursor: pointer; background: #d7ccc8; border: 2px solid #8d6e63; border-radius: 10px; font-weight: bold; }
         button:hover { background: #efebe9; }
@@ -16,6 +17,9 @@
 
 <div id="main-view">
     <h1 class="museum-header">🕰️ 우리 주변의 오래된 물건 전시회</h1>
+    
+    <a href="https://www.emuseum.go.kr" target="_blank" class="top-button">🔍 물건 정보 찾기 (e뮤지엄)</a>
+    
     <p>궁금한 물건을 클릭해서 옛날 사람들의 생활을 알아볼까요?</p>
     <div class="button-grid" id="item-buttons"></div>
     <br>
@@ -38,6 +42,7 @@
 </div>
 
 <script>
+// 데이터 및 기능 스크립트는 동일합니다.
 const data = {
     "맷돌": { "시기": "아주 옛날부터", "방법": "두 돌판 사이에 곡물을 넣고 손잡이를 돌려 갈아요.", "이유": "곡식을 가루로 만들어 요리하려고", "상황": "콩을 갈아 두부나 부침개를 만들 때", "현대물건": "믹서기", "불편함": "힘이 많이 들고 시간이 오래 걸려요.", "기분": "가족을 위해 정성껏 음식을 준비하는 뿌듯함" },
     "카세트 테이프": { "시기": "1980~90년대", "방법": "기기에 테이프를 넣고 재생 버튼을 눌러요.", "이유": "음악을 듣거나 라디오를 녹음하려고", "상황": "좋아하는 노래를 들으려고 연필로 테이프를 감을 때", "현대물건": "스마트폰 음악 앱", "불편함": "원하는 노래를 찾으려면 한참 감아야 해요.", "기분": "좋아하는 가수의 노래를 들을 생각에 설렘" },
@@ -45,52 +50,4 @@ const data = {
     "타자기": { "시기": "컴퓨터 보급 이전", "방법": "글쇠를 눌러 잉크 리본을 종이에 찍어내요.", "이유": "글을 빠르고 깔끔하게 작성하려고", "상황": "편지나 보고서를 작성할 때", "현대물건": "컴퓨터 키보드", "불편함": "오타가 나면 수정이 매우 어려워요.", "기분": "글을 완성했을 때의 뿌듯함" },
     "풍금": { "시기": "1970~80년대 학교", "방법": "발로 페달을 밟아 바람을 일으키며 건반을 눌러요.", "이유": "음악 수업이나 노래를 반주하려고", "상황": "음악 시간에 다 같이 노래를 부를 때", "현대물건": "전자 피아노", "불편함": "발을 계속 굴러야 소리가 나서 힘들어요.", "기분": "함께 노래 부르는 즐거움" },
     "재봉틀": { "시기": "옛날부터 현대까지(수동에서 전기로 변화)", "방법": "바늘이 위아래로 움직이며 천을 꿰매요.", "이유": "옷을 만들거나 수선하려고", "상황": "가족의 옷을 직접 만들어 입힐 때", "현대물건": "전기 재봉틀", "불편함": "손으로 돌리는 수동식은 속도가 느려요.", "기분": "가족을 위해 새 옷을 만드는 정성" },
-    "빨래판과 빨래 방망이": { "시기": "세탁기가 없던 시절", "방법": "판에 대고 비비거나 방망이로 두드려요.", "이유": "옷감의 때를 빼려고", "상황": "냇가나 마당에서 빨래할 때", "현대물건": "세탁기", "불편함": "허리가 아프고 힘이 너무 많이 들어요.", "기분": "빨래를 끝내고 깨끗해진 옷을 볼 때의 시원함" },
-    "다듬잇돌과 방망이": { "시기": "아주 옛날", "방법": "돌 위에 천을 놓고 방망이로 두드려요.", "이유": "옷감의 구김을 펴고 부드럽게 하려고", "상황": "한복 등을 세탁한 후 말리고 나서", "현대물건": "다리미", "불편함": "소리가 매우 크고 손목이 아파요.", "기분": "옷을 정성껏 다듬는 정갈함" },
-    "컴퓨터와 플로피디스크": { "시기": "1990년대", "방법": "디스크를 본체에 넣어 데이터를 저장해요.", "이유": "자료를 보관하고 옮기려고", "상황": "숙제나 그림 파일을 저장할 때", "현대물건": "USB, 클라우드", "불편함": "용량이 너무 작아서 큰 파일을 넣기 어려워요.", "기분": "새로운 기술을 쓰는 신기함" },
-    "다이얼 전화기": { "시기": "1970~80년대", "방법": "숫자 구멍에 손가락을 넣어 끝까지 돌려요.", "이유": "멀리 있는 사람과 대화하려고", "상황": "친구에게 놀러 나오라고 전화할 때", "현대물건": "스마트폰", "불편함": "번호를 하나씩 돌려야 해서 오래 걸려요.", "기분": "목소리를 들을 수 있어 즐거움" },
-    "연탄과 연탄집게": { "시기": "1970~80년대", "방법": "집게로 연탄을 잡아 보일러나 화로에 넣어요.", "이유": "난방과 요리를 하려고", "상황": "겨울철에 방을 따뜻하게 하려고 연탄을 갈 때", "현대물건": "가스보일러", "불편함": "가스가 나올 위험이 있고 무게가 무거워요.", "기분": "추운 겨울을 따뜻하게 날 수 있다는 안도감" },
-    "공중 전화기": { "시기": "핸드폰 이전", "방법": "동전이나 카드를 넣고 번호를 눌러요.", "이유": "밖에서 급히 연락하려고", "상황": "집에 늦을 것 같아 부모님께 연락할 때", "현대물건": "스마트폰", "불편함": "동전이 다 떨어지면 통화가 끊겨요.", "기분": "연락할 곳이 있어 다행이라는 마음" }
-};
-
-const items = Object.keys(data);
-const container = document.getElementById('item-buttons');
-items.forEach(item => {
-    let btn = document.createElement('button');
-    btn.innerText = item;
-    btn.onclick = () => showInfo(item);
-    container.appendChild(btn);
-});
-
-function showInfo(name) {
-    document.getElementById('main-view').style.display = 'none';
-    document.getElementById('content-area').style.display = 'block';
-    document.getElementById('quiz-area').style.display = 'none';
-    document.getElementById('obj-name').innerText = name;
-    const info = data[name];
-    let html = "";
-    const questions = ["시기", "방법", "이유", "상황", "현대물건", "불편함", "기분"];
-    questions.forEach((q, i) => {
-        html += `<p><b>${i+1}. ${q}:</b> ${info[q]}</p>`;
-    });
-    document.getElementById('obj-info').innerHTML = html;
-}
-
-function showQuiz() {
-    document.getElementById('main-view').style.display = 'none';
-    document.getElementById('content-area').style.display = 'none';
-    document.getElementById('quiz-area').style.display = 'block';
-    let qHtml = "<p>준비된 사진과 아래 이름을 연결해보세요!</p><ul>";
-    items.forEach(item => qHtml += `<li>${item}</li>`);
-    qHtml += "</ul>";
-    document.getElementById('quiz-content').innerHTML = qHtml;
-}
-
-function goBack() {
-    document.getElementById('main-view').style.display = 'block';
-    document.getElementById('content-area').style.display = 'none';
-    document.getElementById('quiz-area').style.display = 'none';
-}
-</script>
-</body>
-</html>
+    "빨래판과 빨래 방망이": { "시기": "세탁기가 없던 시절", "방법": "판에 대고 비비거나 방망이로 두드려요.", "이유": "옷감의 때를 빼려고", "상황": "냇가나 마

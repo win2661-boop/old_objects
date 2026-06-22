@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,96 +8,640 @@
         :root {
             --bg-color: #f2efe9;
             --main-brown: #5c4d3d;
+            --light-brown: #887a6a;
+            --point-brown: #7a5c3e;
+            --cream: #fffaf2;
             --white: #ffffff;
             --shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
-        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--main-brown); margin: 0; padding: 40px 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        /* A 화면 */
-        #screenA { text-align: center; margin-top: 100px; }
-        #screenA h1 { font-size: 3.5rem; margin-bottom: 10px; }
-        #screenA p { font-size: 1.5rem; color: #887a6a; margin-bottom: 50px; }
-        .btn-main { padding: 20px 40px; font-size: 1.2rem; background: var(--main-brown); color: white; border: none; border-radius: 50px; cursor: pointer; margin: 0 10px; }
-
-        /* B 화면 (조사하기) */
-        .input-box { margin-bottom: 25px; text-align: left; }
-        .input-box label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 1.1rem; }
-        input[type="text"], input[type="file"], textarea { 
-            width: 100%; padding: 15px; border: 2px solid var(--main-brown); border-radius: 10px; box-sizing: border-box; font-size: 1rem; 
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--main-brown);
+            margin: 0;
+            padding: 40px 20px;
         }
-        textarea { height: 120px; resize: vertical; } /* 최소 3줄 이상 공간 */
 
-        /* C 화면 (전시관) */
-        .gallery-container { display: flex; flex-direction: column; align-items: center; gap: 50px; margin-top: 40px; }
-        .card-wrapper { width: 80%; aspect-ratio: 16/9; perspective: 1000px; cursor: pointer; }
-        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
-        .card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; padding: 20px; box-shadow: var(--shadow); border-radius: 15px; }
-        .card-front img { width: 100%; height: 85%; object-fit: cover; border-radius: 10px; }
-        .card-back { transform: rotateY(180deg); overflow-y: auto; }
-        
-        .screen { display: none; }
-        .active { display: block; }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        /* 공통 버튼 */
+        .btn-main {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            background: var(--main-brown);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.18);
+            transition: 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            background: #403529;
+        }
+
+        .btn-sub {
+            padding: 14px 28px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border: 2px solid var(--main-brown);
+            background: var(--cream);
+            color: var(--main-brown);
+            border-radius: 40px;
+            cursor: pointer;
+            margin: 8px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.12);
+            transition: 0.2s;
+        }
+
+        .btn-sub:hover {
+            transform: translateY(-2px);
+            background: #efe2cf;
+        }
+
+        .nav-footer {
+            margin-top: 45px;
+            padding-top: 25px;
+            border-top: 2px dashed #c9b9a5;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* A 화면 */
+        #screenA {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        #screenA h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        #screenA p {
+            font-size: 1.5rem;
+            color: var(--light-brown);
+            margin-bottom: 50px;
+        }
+
+        .home-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* B 화면 */
+        #screenB {
+            background: rgba(255,255,255,0.55);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        #screenB h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .input-box {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-brown);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background: white;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* C 화면 */
+        .exhibition-header {
+            text-align: center;
+            background: linear-gradient(135deg, #fff8ec, #e7d6bf);
+            border: 4px double var(--point-brown);
+            border-radius: 28px;
+            padding: 30px 20px;
+            margin-bottom: 35px;
+            box-shadow: var(--shadow);
+        }
+
+        .exhibition-header h1 {
+            font-size: 3.2rem;
+            margin: 0;
+            letter-spacing: -1px;
+            color: var(--main-brown);
+        }
+
+        .exhibition-header p {
+            font-size: 1.25rem;
+            margin: 12px 0 0;
+            color: var(--light-brown);
+        }
+
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        .card-wrapper {
+            width: 80%;
+            aspect-ratio: 16/9;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-radius: 15px;
+            box-sizing: border-box;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 82%;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #e2d5c5;
+        }
+
+        .card-front h2 {
+            text-align: center;
+            margin: 10px 0 0;
+            font-size: 1.8rem;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            line-height: 1.7;
+        }
+
+        .card-back h3 {
+            font-size: 2rem;
+            margin: 0 0 15px;
+            border-bottom: 2px solid #d9c6ae;
+            padding-bottom: 8px;
+        }
+
+        .card-back p {
+            font-size: 15pt;
+            margin: 12px 0;
+            white-space: pre-wrap;
+        }
+
+        .empty-message {
+            text-align: center;
+            font-size: 1.4rem;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+
+    <!-- A 화면 -->
     <div id="screenA" class="screen active">
         <h1>과거 탐험단의 옛날 물건 전시회</h1>
         <p>오래된 물건으로 옛날 사람들의 생활 모습 알아보기</p>
-        <button class="btn-main" onclick="showScreen('screenB')">1. 조사하기</button>
-        <button class="btn-main" onclick="loadExhibition()">2. 전시하기</button>
+
+        <div class="home-buttons">
+            <button class="btn-main" onclick="showScreen('screenB')">1. 조사하기</button>
+            <button class="btn-main" onclick="loadExhibition()">2. 전시하기</button>
+            <button class="btn-main" onclick="downloadAllAsImage()">전체 이미지로 저장하기</button>
+        </div>
     </div>
 
+    <!-- B 화면 -->
     <div id="screenB" class="screen">
-        <h2 style="text-align: center;">물건 조사하기</h2>
-        <div class="input-box"><label>1. 이름</label><input type="text" id="userName"></div>
-        <div class="input-box"><label>2. 물건 사진</label><input type="file" id="itemImg" accept="image/*"></div>
-        <div class="input-box"><label>3. 물건 이름</label><input type="text" id="itemName"></div>
-        <div class="input-box"><label>4. 소개하기</label><textarea id="itemIntro"></textarea></div>
-        <div class="input-box"><label>5. 왜? 어떻게 사용했을까?</label><textarea id="itemUse"></textarea></div>
-        <div class="input-box"><label>6. 요즘에는? 왜 사라졌을까?</label><textarea id="itemReason"></textarea></div>
-        <button class="btn-main" style="width: 100%;" onclick="saveData()">저장하기</button>
-        <button onclick="showScreen('screenA')">돌아가기</button>
+        <h2>물건 조사하기</h2>
+
+        <div class="input-box">
+            <label>1. 이름</label>
+            <input type="text" id="userName" placeholder="이름을 입력하세요">
+        </div>
+
+        <div class="input-box">
+            <label>2. 물건 사진</label>
+            <input type="file" id="itemImg" accept="image/*">
+        </div>
+
+        <div class="input-box">
+            <label>3. 물건 이름</label>
+            <input type="text" id="itemName" placeholder="예: 다듬이, 풍로, 석유곤로">
+        </div>
+
+        <div class="input-box">
+            <label>4. 소개하기</label>
+            <textarea id="itemIntro" placeholder="이 물건이 무엇인지 소개해 보세요."></textarea>
+        </div>
+
+        <div class="input-box">
+            <label>5. 왜? 어떻게 사용했을까?</label>
+            <textarea id="itemUse" placeholder="이 물건을 왜 사용했는지, 어떻게 사용했는지 써 보세요."></textarea>
+        </div>
+
+        <div class="input-box">
+            <label>6. 요즘에는? 왜 사라졌을까?</label>
+            <textarea id="itemReason" placeholder="오늘날의 물건과 비교하고, 왜 잘 쓰지 않게 되었는지 써 보세요."></textarea>
+        </div>
+
+        <button class="btn-main" style="width: 100%; margin: 10px 0;" onclick="saveData()">저장하기</button>
+
+        <div class="nav-footer">
+            <button class="btn-sub" onclick="showScreen('screenA')">홈으로 가기</button>
+        </div>
     </div>
 
+    <!-- C 화면 -->
     <div id="screenC" class="screen">
-        <button onclick="showScreen('screenA')">← 전시회 홈으로</button>
+        <div class="exhibition-header">
+            <h1>온라인 과거 전시관</h1>
+            <p>사진을 눌러 옛날 물건의 이야기를 살펴보세요.</p>
+        </div>
+
         <div id="gallery" class="gallery-container"></div>
+
+        <div class="nav-footer">
+            <button class="btn-sub" onclick="showScreen('screenA')">홈으로 가기</button>
+            <button class="btn-sub" onclick="downloadAllAsImage()">전체 이미지로 저장하기</button>
+        </div>
     </div>
 </div>
 
 <script>
-    function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function escapeHTML(text) {
+        return String(text || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
     function saveData() {
         const file = document.getElementById('itemImg').files[0];
+
+        if (!file) {
+            alert('물건 사진을 넣어 주세요.');
+            return;
+        }
+
+        const userName = document.getElementById('userName').value.trim();
+        const itemName = document.getElementById('itemName').value.trim();
+
+        if (!userName || !itemName) {
+            alert('이름과 물건 이름을 입력해 주세요.');
+            return;
+        }
+
         const reader = new FileReader();
+
         reader.onload = function(e) {
-            const data = { userName: document.getElementById('userName').value, itemName: document.getElementById('itemName').value, itemIntro: document.getElementById('itemIntro').value, itemUse: document.getElementById('itemUse').value, itemReason: document.getElementById('itemReason').value, imgBase64: e.target.result };
+            const data = {
+                userName: userName,
+                itemName: itemName,
+                itemIntro: document.getElementById('itemIntro').value,
+                itemUse: document.getElementById('itemUse').value,
+                itemReason: document.getElementById('itemReason').value,
+                imgBase64: e.target.result
+            };
+
             let list = JSON.parse(localStorage.getItem('exhibits') || '[]');
             list.push(data);
             localStorage.setItem('exhibits', JSON.stringify(list));
+
             alert('저장 완료!');
+            clearForm();
             showScreen('screenA');
         };
+
         reader.readAsDataURL(file);
     }
+
+    function clearForm() {
+        document.getElementById('userName').value = '';
+        document.getElementById('itemImg').value = '';
+        document.getElementById('itemName').value = '';
+        document.getElementById('itemIntro').value = '';
+        document.getElementById('itemUse').value = '';
+        document.getElementById('itemReason').value = '';
+    }
+
     function loadExhibition() {
-        const gallery = document.getElementById('gallery'); gallery.innerHTML = '';
-        JSON.parse(localStorage.getItem('exhibits') || '[]').forEach(item => {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = '';
+
+        const list = JSON.parse(localStorage.getItem('exhibits') || '[]');
+
+        if (list.length === 0) {
+            gallery.innerHTML = `
+                <div class="empty-message">
+                    아직 저장된 전시 물건이 없습니다.<br>
+                    먼저 조사하기에서 물건을 저장해 주세요.
+                </div>
+            `;
+            showScreen('screenC');
+            return;
+        }
+
+        list.forEach(item => {
             gallery.innerHTML += `
                 <div class="card-wrapper" onclick="this.classList.toggle('flipped')">
                     <div class="card-inner">
-                        <div class="card-front"><img src="${item.imgBase64}"><h2 style="text-align:center">${item.itemName}</h2></div>
-                        <div class="card-back"><h3>${item.itemName}</h3><p><b>작성자:</b> ${item.userName}</p><p><b>소개:</b> ${item.itemIntro}</p><p><b>사용법:</b> ${item.itemUse}</p><p><b>변화:</b> ${item.itemReason}</p></div>
+                        <div class="card-front">
+                            <img src="${item.imgBase64}" alt="${escapeHTML(item.itemName)} 사진">
+                            <h2>${escapeHTML(item.itemName)}</h2>
+                        </div>
+                        <div class="card-back">
+                            <h3>${escapeHTML(item.itemName)}</h3>
+                            <p><b>작성자:</b> ${escapeHTML(item.userName)}</p>
+                            <p><b>소개:</b> ${escapeHTML(item.itemIntro)}</p>
+                            <p><b>사용법:</b> ${escapeHTML(item.itemUse)}</p>
+                            <p><b>변화:</b> ${escapeHTML(item.itemReason)}</p>
+                        </div>
                     </div>
-                </div>`;
+                </div>
+            `;
         });
+
         showScreen('screenC');
     }
+
+    function loadImage(src) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = src;
+        });
+    }
+
+    function drawRoundedRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+        const words = String(text || '').replace(/\n/g, ' \n ').split(' ');
+        let line = '';
+        let lines = [];
+
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+
+            if (word === '\n') {
+                lines.push(line);
+                line = '';
+                continue;
+            }
+
+            const testLine = line + word + ' ';
+            const testWidth = ctx.measureText(testLine).width;
+
+            if (testWidth > maxWidth && line !== '') {
+                lines.push(line);
+                line = word + ' ';
+            } else {
+                line = testLine;
+            }
+        }
+
+        lines.push(line);
+
+        if (lines.length > maxLines) {
+            lines = lines.slice(0, maxLines);
+            lines[maxLines - 1] = lines[maxLines - 1].trim() + '...';
+        }
+
+        lines.forEach((l, idx) => {
+            ctx.fillText(l.trim(), x, y + idx * lineHeight);
+        });
+
+        return y + lines.length * lineHeight;
+    }
+
+    function drawImageContain(ctx, img, x, y, w, h) {
+        if (!img) {
+            ctx.fillStyle = '#efe2cf';
+            ctx.fillRect(x, y, w, h);
+            ctx.fillStyle = '#5c4d3d';
+            ctx.font = '24px Pretendard, Arial';
+            ctx.fillText('사진 없음', x + 80, y + h / 2);
+            return;
+        }
+
+        const imgRatio = img.width / img.height;
+        const boxRatio = w / h;
+        let drawW, drawH, drawX, drawY;
+
+        if (imgRatio > boxRatio) {
+            drawW = w;
+            drawH = w / imgRatio;
+            drawX = x;
+            drawY = y + (h - drawH) / 2;
+        } else {
+            drawH = h;
+            drawW = h * imgRatio;
+            drawX = x + (w - drawW) / 2;
+            drawY = y;
+        }
+
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+    }
+
+    async function downloadAllAsImage() {
+        const list = JSON.parse(localStorage.getItem('exhibits') || '[]');
+
+        if (list.length === 0) {
+            alert('저장된 전시 물건이 없습니다. 먼저 조사하기에서 물건을 저장해 주세요.');
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+
+        // A4 세로 비율 이미지
+        canvas.width = 1240;
+        canvas.height = 1754;
+
+        const ctx = canvas.getContext('2d');
+
+        // 배경
+        ctx.fillStyle = '#f2efe9';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 제목 영역
+        ctx.fillStyle = '#5c4d3d';
+        ctx.font = 'bold 58px Pretendard, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('온라인 과거 전시관', canvas.width / 2, 90);
+
+        ctx.font = '28px Pretendard, Arial, sans-serif';
+        ctx.fillStyle = '#887a6a';
+        ctx.fillText('오래된 물건으로 옛날 사람들의 생활 모습 알아보기', canvas.width / 2, 135);
+
+        // 전시 물건을 1쪽에 들어가도록 자동 배치
+        const marginX = 70;
+        let y = 190;
+        const gap = 22;
+        const maxItems = Math.min(list.length, 4);
+        const boxHeight = Math.floor((canvas.height - y - 80 - gap * (maxItems - 1)) / maxItems);
+
+        for (let i = 0; i < maxItems; i++) {
+            const item = list[i];
+            const img = await loadImage(item.imgBase64);
+
+            // 카드 배경
+            ctx.fillStyle = '#ffffff';
+            drawRoundedRect(ctx, marginX, y, canvas.width - marginX * 2, boxHeight, 28);
+            ctx.fill();
+            ctx.strokeStyle = '#d6c4ae';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // 사진 영역
+            const imgX = marginX + 30;
+            const imgY = y + 35;
+            const imgW = 320;
+            const imgH = boxHeight - 70;
+
+            ctx.save();
+            drawRoundedRect(ctx, imgX, imgY, imgW, imgH, 18);
+            ctx.clip();
+            ctx.fillStyle = '#fffaf2';
+            ctx.fillRect(imgX, imgY, imgW, imgH);
+            drawImageContain(ctx, img, imgX, imgY, imgW, imgH);
+            ctx.restore();
+
+            // 글 영역
+            const textX = imgX + imgW + 35;
+            const textW = canvas.width - textX - marginX - 30;
+            let textY = y + 55;
+
+            ctx.textAlign = 'left';
+
+            ctx.fillStyle = '#5c4d3d';
+            ctx.font = 'bold 34px Pretendard, Arial, sans-serif';
+            ctx.fillText(item.itemName || '이름 없는 물건', textX, textY);
+
+            textY += 42;
+            ctx.font = '22px Pretendard, Arial, sans-serif';
+            ctx.fillStyle = '#6f6254';
+            ctx.fillText('작성자: ' + (item.userName || ''), textX, textY);
+
+            textY += 38;
+            ctx.fillStyle = '#3f352b';
+            ctx.font = 'bold 24px Pretendard, Arial, sans-serif';
+            ctx.fillText('소개', textX, textY);
+
+            ctx.font = '22px Pretendard, Arial, sans-serif';
+            textY = drawWrappedText(ctx, item.itemIntro, textX + 65, textY, textW - 65, 30, 2);
+
+            textY += 8;
+            ctx.font = 'bold 24px Pretendard, Arial, sans-serif';
+            ctx.fillText('사용법', textX, textY);
+
+            ctx.font = '22px Pretendard, Arial, sans-serif';
+            textY = drawWrappedText(ctx, item.itemUse, textX + 85, textY, textW - 85, 30, 2);
+
+            textY += 8;
+            ctx.font = 'bold 24px Pretendard, Arial, sans-serif';
+            ctx.fillText('변화', textX, textY);
+
+            ctx.font = '22px Pretendard, Arial, sans-serif';
+            drawWrappedText(ctx, item.itemReason, textX + 65, textY, textW - 65, 30, 2);
+
+            y += boxHeight + gap;
+        }
+
+        if (list.length > 4) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#887a6a';
+            ctx.font = '22px Pretendard, Arial, sans-serif';
+            ctx.fillText('※ 1쪽 이미지에는 앞의 4개 전시 물건만 들어갑니다.', canvas.width / 2, canvas.height - 35);
+        }
+
+        const link = document.createElement('a');
+        link.download = '온라인_과거_전시관.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
 </script>
+
 </body>
 </html>
+```

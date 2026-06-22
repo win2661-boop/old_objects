@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -36,7 +35,6 @@
             display: block;
         }
 
-        /* 공통 버튼 */
         .btn-main {
             padding: 20px 40px;
             font-size: 1.2rem;
@@ -84,7 +82,6 @@
             gap: 10px;
         }
 
-        /* A 화면 */
         #screenA {
             text-align: center;
             margin-top: 100px;
@@ -108,7 +105,6 @@
             gap: 12px;
         }
 
-        /* B 화면 */
         #screenB {
             background: rgba(255,255,255,0.55);
             padding: 30px;
@@ -150,7 +146,6 @@
             line-height: 1.6;
         }
 
-        /* C 화면 */
         .exhibition-header {
             text-align: center;
             background: linear-gradient(135deg, #fff8ec, #e7d6bf);
@@ -178,13 +173,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 50px;
+            gap: 45px;
             margin-top: 40px;
         }
 
         .card-wrapper {
-            width: 80%;
-            aspect-ratio: 16/9;
+            width: 82%;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -192,7 +186,6 @@
         .card-inner {
             position: relative;
             width: 100%;
-            height: 100%;
             transition: transform 0.8s;
             transform-style: preserve-3d;
         }
@@ -202,35 +195,44 @@
         }
 
         .card-front, .card-back {
-            position: absolute;
             width: 100%;
-            height: 100%;
+            min-height: 460px;
             backface-visibility: hidden;
             background: white;
-            padding: 20px;
+            padding: 22px;
             box-shadow: var(--shadow);
-            border-radius: 15px;
+            border-radius: 18px;
             box-sizing: border-box;
+        }
+
+        .card-front {
+            position: relative;
+        }
+
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            line-height: 1.7;
         }
 
         .card-front img {
             width: 100%;
-            height: 82%;
-            object-fit: cover;
-            border-radius: 10px;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            border-radius: 12px;
             border: 2px solid #e2d5c5;
+            background: #fffaf2;
+            display: block;
         }
 
         .card-front h2 {
             text-align: center;
-            margin: 10px 0 0;
-            font-size: 1.8rem;
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-            overflow-y: auto;
-            line-height: 1.7;
+            margin: 18px 0 0;
+            font-size: 1.9rem;
         }
 
         .card-back h3 {
@@ -260,7 +262,6 @@
 
 <div class="container">
 
-    <!-- A 화면 -->
     <div id="screenA" class="screen active">
         <h1>과거 탐험단의 옛날 물건 전시회</h1>
         <p>오래된 물건으로 옛날 사람들의 생활 모습 알아보기</p>
@@ -272,7 +273,6 @@
         </div>
     </div>
 
-    <!-- B 화면 -->
     <div id="screenB" class="screen">
         <h2>물건 조사하기</h2>
 
@@ -313,7 +313,6 @@
         </div>
     </div>
 
-    <!-- C 화면 -->
     <div id="screenC" class="screen">
         <div class="exhibition-header">
             <h1>온라인 과거 전시관</h1>
@@ -369,11 +368,15 @@
                 itemIntro: document.getElementById('itemIntro').value,
                 itemUse: document.getElementById('itemUse').value,
                 itemReason: document.getElementById('itemReason').value,
-                imgBase64: e.target.result
+                imgBase64: e.target.result,
+                savedAt: Date.now()
             };
 
             let list = JSON.parse(localStorage.getItem('exhibits') || '[]');
-            list.push(data);
+
+            // 최근에 저장한 물건이 항상 맨 위에 오도록 추가
+            list.unshift(data);
+
             localStorage.setItem('exhibits', JSON.stringify(list));
 
             alert('저장 완료!');
@@ -393,11 +396,23 @@
         document.getElementById('itemReason').value = '';
     }
 
+    function getSortedExhibits() {
+        const list = JSON.parse(localStorage.getItem('exhibits') || '[]');
+
+        // savedAt이 있는 자료는 최신순으로 정렬
+        // 예전 방식으로 저장된 자료는 뒤쪽에 유지
+        return list.sort((a, b) => {
+            const timeA = a.savedAt || 0;
+            const timeB = b.savedAt || 0;
+            return timeB - timeA;
+        });
+    }
+
     function loadExhibition() {
         const gallery = document.getElementById('gallery');
         gallery.innerHTML = '';
 
-        const list = JSON.parse(localStorage.getItem('exhibits') || '[]');
+        const list = getSortedExhibits();
 
         if (list.length === 0) {
             gallery.innerHTML = `
@@ -525,7 +540,7 @@
     }
 
     async function downloadAllAsImage() {
-        const list = JSON.parse(localStorage.getItem('exhibits') || '[]');
+        const list = getSortedExhibits();
 
         if (list.length === 0) {
             alert('저장된 전시 물건이 없습니다. 먼저 조사하기에서 물건을 저장해 주세요.');
@@ -534,17 +549,14 @@
 
         const canvas = document.createElement('canvas');
 
-        // A4 세로 비율 이미지
         canvas.width = 1240;
         canvas.height = 1754;
 
         const ctx = canvas.getContext('2d');
 
-        // 배경
         ctx.fillStyle = '#f2efe9';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 제목 영역
         ctx.fillStyle = '#5c4d3d';
         ctx.font = 'bold 58px Pretendard, Arial, sans-serif';
         ctx.textAlign = 'center';
@@ -554,7 +566,6 @@
         ctx.fillStyle = '#887a6a';
         ctx.fillText('오래된 물건으로 옛날 사람들의 생활 모습 알아보기', canvas.width / 2, 135);
 
-        // 전시 물건을 1쪽에 들어가도록 자동 배치
         const marginX = 70;
         let y = 190;
         const gap = 22;
@@ -565,7 +576,6 @@
             const item = list[i];
             const img = await loadImage(item.imgBase64);
 
-            // 카드 배경
             ctx.fillStyle = '#ffffff';
             drawRoundedRect(ctx, marginX, y, canvas.width - marginX * 2, boxHeight, 28);
             ctx.fill();
@@ -573,7 +583,6 @@
             ctx.lineWidth = 3;
             ctx.stroke();
 
-            // 사진 영역
             const imgX = marginX + 30;
             const imgY = y + 35;
             const imgW = 320;
@@ -587,7 +596,6 @@
             drawImageContain(ctx, img, imgX, imgY, imgW, imgH);
             ctx.restore();
 
-            // 글 영역
             const textX = imgX + imgW + 35;
             const textW = canvas.width - textX - marginX - 30;
             let textY = y + 55;
@@ -632,7 +640,7 @@
             ctx.textAlign = 'center';
             ctx.fillStyle = '#887a6a';
             ctx.font = '22px Pretendard, Arial, sans-serif';
-            ctx.fillText('※ 1쪽 이미지에는 앞의 4개 전시 물건만 들어갑니다.', canvas.width / 2, canvas.height - 35);
+            ctx.fillText('※ 1쪽 이미지에는 최근 전시 물건 4개만 들어갑니다.', canvas.width / 2, canvas.height - 35);
         }
 
         const link = document.createElement('a');
@@ -644,4 +652,3 @@
 
 </body>
 </html>
-```
